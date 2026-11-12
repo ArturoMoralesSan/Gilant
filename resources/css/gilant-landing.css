@@ -1,0 +1,501 @@
+/* =========================================================
+   GILANT — IDENTIDAD VISUAL
+   Verde bosque, madera y blanco cálido
+========================================================= */
+
+:root {
+    /* =====================================================
+       COLORES INSTITUCIONALES
+    ===================================================== */
+
+    --gilant-forest: #123D2D;
+    --gilant-forest-dark: #0B2B20;
+    --gilant-gold: #C49A5A;
+    --gilant-cream: #F7F4EC;
+    --gilant-olive: #71845B;
+
+    /* =====================================================
+       COLORES COMPLEMENTARIOS
+    ===================================================== */
+
+    --gilant-white: #FFFFFF;
+    --gilant-black: #1C211D;
+
+    --gilant-text: #343B35;
+    --gilant-text-light: #747B73;
+    --gilant-text-muted: #92988F;
+
+    --gilant-border: rgba(18, 61, 45, 0.12);
+    --gilant-border-light: rgba(247, 244, 236, 0.16);
+
+    /* =====================================================
+       FONDOS
+    ===================================================== */
+
+    --gilant-bg: #FFFFFF;
+    --gilant-bg-soft: #F7F4EC;
+    --gilant-bg-dark: #0B2B20;
+    --gilant-bg-forest: #123D2D;
+
+    /* =====================================================
+       TIPOGRAFÍA
+    ===================================================== */
+
+    --gilant-font-heading: inherit;
+    --gilant-font-body: inherit;
+
+    --gilant-text-xs: 0.75rem;
+    --gilant-text-sm: 0.875rem;
+    --gilant-text-base: 1rem;
+    --gilant-text-lg: 1.125rem;
+    --gilant-text-xl: 1.25rem;
+
+    --gilant-heading-sm: clamp(1.5rem, 2.5vw, 2rem);
+    --gilant-heading-md: clamp(2rem, 3.5vw, 3rem);
+    --gilant-heading-lg: clamp(2.5rem, 5vw, 4.5rem);
+
+    /* =====================================================
+       CONTENEDORES
+    ===================================================== */
+
+    --gilant-content-width: 88%;
+    --gilant-content-max: 1440px;
+
+    --gilant-container-width: min(
+        var(--gilant-content-width),
+        var(--gilant-content-max)
+    );
+
+    --gilant-container-padding: clamp(18px, 4vw, 60px);
+
+    /* =====================================================
+       ESPACIADO DE SECCIONES
+    ===================================================== */
+
+    --gilant-section-padding: clamp(70px, 8vw, 120px);
+    --gilant-section-padding-sm: clamp(45px, 5vw, 75px);
+    --gilant-section-padding-lg: clamp(90px, 10vw, 150px);
+
+    --gilant-gap-xs: 10px;
+    --gilant-gap-sm: 18px;
+    --gilant-gap-md: 28px;
+    --gilant-gap-lg: 45px;
+    --gilant-gap-xl: 65px;
+
+    /* =====================================================
+       BORDES Y RADIOS
+    ===================================================== */
+
+    --gilant-radius: 3px;
+    --gilant-radius-md: 5px;
+    --gilant-radius-lg: 8px;
+    --gilant-radius-pill: 999px;
+
+    /* =====================================================
+       SOMBRAS
+    ===================================================== */
+
+    --gilant-shadow: 0 12px 35px rgba(11, 43, 32, 0.08);
+    --gilant-shadow-hover: 0 18px 45px rgba(11, 43, 32, 0.14);
+    --gilant-shadow-header: 0 8px 30px rgba(0, 0, 0, 0.12);
+
+    /* =====================================================
+       TRANSICIONES
+    ===================================================== */
+
+    --gilant-transition: all 0.3s ease;
+    --gilant-transition-slow: all 0.5s ease;
+    --gilant-transition-fast: all 0.2s ease;
+
+    /* =====================================================
+       CAPAS
+    ===================================================== */
+
+    --gilant-z-header: 1000;
+    --gilant-z-menu: 1001;
+    --gilant-z-menu-toggle: 1002;
+    --gilant-z-modal: 1100;
+}
+
+/* =========================================================
+   CONTENEDOR GLOBAL
+========================================================= */
+
+.gilant-container {
+    width: var(--gilant-container-width);
+    max-width: var(--gilant-content-max);
+    margin-inline: auto;
+}
+
+/* =========================================================
+   SECCIONES
+========================================================= */
+
+.gilant-section {
+    position: relative;
+    width: 100%;
+}
+
+/* =========================================================
+   IMÁGENES FULL WIDTH
+========================================================= */
+
+.gilant-full-width {
+    width: 100%;
+}
+
+/* =========================================================
+   ESPACIADO VERTICAL
+========================================================= */
+
+.gilant-section-padding {
+    padding-block: var(--gilant-section-padding);
+}
+
+/* =========================================================
+   GILANT HEADER
+========================================================= */
+
+/* =========================================================
+   HEADER PRINCIPAL
+========================================================= */
+
+.gilant-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: var(--gilant-z-header);
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    width: 100%;
+    min-height: 100px;
+    padding: 0 6%;
+
+    /* ÚNICO CAMBIO: GLASS VERDE */
+    background: rgba(18, 61, 45, 0.72);
+    border-bottom: 1px solid rgba(247, 244, 236, 0.20);
+
+    backdrop-filter: blur(16px) saturate(140%);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+
+    transition:
+        background 0.4s ease,
+        box-shadow 0.4s ease,
+        border-color 0.4s ease,
+        min-height 0.4s ease,
+        backdrop-filter 0.4s ease;
+}
+
+/* =========================================================
+   ESTADO AL DESPLAZARSE
+========================================================= */
+
+.gilant-header.is-scrolled {
+    position: fixed;
+    min-height: 82px;
+
+    background: rgba(11, 43, 32, 0.82);
+    border-bottom: 1px solid rgba(196, 154, 90, 0.25);
+
+    box-shadow: var(--gilant-shadow-header);
+
+    backdrop-filter: blur(18px) saturate(150%);
+    -webkit-backdrop-filter: blur(18px) saturate(150%);
+}
+
+/* =========================================================
+   LOGOTIPO
+========================================================= */
+
+.gilant-brand {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+
+    text-decoration: none;
+}
+
+.gilant-brand-logo {
+    display: block;
+
+    width: auto;
+    max-width: 190px;
+    max-height: 65px;
+
+    object-fit: contain;
+
+    transition:
+        max-height 0.35s ease,
+        transform 0.35s ease;
+}
+
+.gilant-header.is-scrolled .gilant-brand-logo {
+    max-height: 55px;
+}
+
+/* =========================================================
+   NAVEGACIÓN
+========================================================= */
+
+.gilant-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: clamp(18px, 2.1vw, 34px);
+    padding: 0 35px;
+}
+
+.gilant-nav a {
+    position: relative;
+
+    display: inline-flex;
+    align-items: center;
+
+    padding: 12px 0;
+
+    color: var(--gilant-cream);
+
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.035em;
+
+    text-decoration: none;
+    white-space: nowrap;
+
+    transition: color 0.25s ease;
+}
+
+/* Línea inferior */
+
+.gilant-nav a::after {
+    position: absolute;
+    right: 0;
+    bottom: 3px;
+    left: 0;
+
+    height: 2px;
+    content: "";
+
+    background: var(--gilant-gold);
+
+    transform: scaleX(0);
+    transform-origin: left;
+
+    transition: transform 0.3s ease;
+}
+
+.gilant-nav a:hover,
+.gilant-nav a.is-active {
+    color: var(--gilant-gold);
+}
+
+.gilant-nav a:hover::after,
+.gilant-nav a.is-active::after {
+    transform: scaleX(1);
+}
+
+/* =========================================================
+   BOTÓN MENÚ MÓVIL
+========================================================= */
+
+.gilant-menu-toggle {
+    display: none;
+    align-items: center;
+    justify-content: center;
+
+    width: 44px;
+    height: 44px;
+    padding: 0;
+
+    color: var(--gilant-cream);
+
+    background: transparent;
+    border: 1px solid rgba(247, 244, 236, 0.35);
+    border-radius: 2px;
+
+    cursor: pointer;
+
+    transition:
+        color 0.25s ease,
+        border-color 0.25s ease,
+        background 0.25s ease;
+}
+
+.gilant-menu-toggle:hover {
+    color: var(--gilant-gold);
+    border-color: var(--gilant-gold);
+}
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 1100px) {
+    .gilant-header {
+        padding: 0 4%;
+    }
+
+    .gilant-nav {
+        gap: 17px;
+        padding: 0 20px;
+    }
+
+    .gilant-nav a {
+        font-size: 12px;
+    }
+
+    .gilant-brand-logo {
+        max-width: 160px;
+    }
+}
+
+/* =========================================================
+   MÓVIL
+========================================================= */
+
+@media (max-width: 850px) {
+    :root {
+        --gilant-content-width: 92%;
+        --gilant-section-padding: 70px;
+    }
+
+    .gilant-header,
+    .gilant-header.is-scrolled {
+        position: fixed;
+
+        min-height: 76px;
+        padding: 0 22px;
+
+        /* MISMO GLASS VERDE EN MÓVIL */
+        background: rgba(18, 61, 45, 0.82);
+        border-bottom: 1px solid rgba(196, 154, 90, 0.25);
+
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.10);
+
+        backdrop-filter: blur(16px) saturate(140%);
+        -webkit-backdrop-filter: blur(16px) saturate(140%);
+    }
+
+    .gilant-brand-logo {
+        max-width: 155px;
+        max-height: 54px;
+    }
+
+    .gilant-menu-toggle {
+        display: inline-flex;
+
+        position: relative;
+        z-index: var(--gilant-z-menu-toggle);
+    }
+
+    /* Menú desplegable */
+
+    .gilant-nav {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        left: 0;
+        z-index: var(--gilant-z-menu);
+
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+
+        gap: 0;
+
+        max-height: 0;
+        margin: 0;
+        padding: 0 25px;
+
+        overflow: hidden;
+        visibility: hidden;
+
+        background: var(--gilant-forest-dark);
+
+        border-bottom: 1px solid transparent;
+
+        opacity: 0;
+
+        transition:
+            max-height 0.4s ease,
+            padding 0.3s ease,
+            opacity 0.3s ease,
+            visibility 0.3s ease;
+    }
+
+    .gilant-nav.is-open {
+        max-height: 500px;
+        padding: 12px 25px 22px;
+
+        visibility: visible;
+        opacity: 1;
+
+        border-bottom-color: rgba(196, 154, 90, 0.3);
+    }
+
+    .gilant-nav a {
+        display: block;
+
+        width: 100%;
+        padding: 15px 0;
+
+        color: var(--gilant-cream);
+        font-size: 14px;
+
+        border-bottom: 1px solid rgba(247, 244, 236, 0.09);
+    }
+
+    .gilant-nav a:last-child {
+        border-bottom: none;
+    }
+
+    .gilant-nav a::after {
+        display: none;
+    }
+
+    .gilant-nav a:hover,
+    .gilant-nav a.is-active {
+        color: var(--gilant-gold);
+    }
+}
+
+/* =========================================================
+   MÓVILES PEQUEÑOS
+========================================================= */
+
+@media (max-width: 480px) {
+    :root {
+        --gilant-content-width: 90%;
+        --gilant-section-padding: 55px;
+        --gilant-section-padding-sm: 40px;
+    }
+
+    .gilant-header,
+    .gilant-header.is-scrolled {
+        min-height: 70px;
+        padding: 0 18px;
+    }
+
+    .gilant-brand-logo {
+        max-width: 135px;
+        max-height: 48px;
+    }
+}
+
+/* =========================================================
+   ACCESIBILIDAD
+========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+    .gilant-header,
+    .gilant-header *,
+    .gilant-header *::before,
+    .gilant-header *::after {
+        transition-duration: 0.01ms !important;
+    }
+}

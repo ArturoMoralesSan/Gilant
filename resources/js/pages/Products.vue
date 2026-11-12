@@ -1,0 +1,286 @@
+<script setup lang="ts">
+import { computed } from 'vue'
+import { Head } from '@inertiajs/vue3'
+
+import GilantFooter from '@/Components/GilantFooter.vue'
+import GilantHeader from '@/Components/GilantHeader.vue'
+import GilantHero from '@/Components/GilantHero.vue'
+import ItemCards from '@/Components/ItemCards.vue'
+
+import '../../css/gilant-landing.css'
+
+// -----------------------------------------------------------------------------
+// TIPOS
+// -----------------------------------------------------------------------------
+
+interface Banner {
+    title: string
+    subtitle: string | null
+    description: string | null
+    image: string
+    image_url: string
+    alt_text: string | null
+    link_url: string | null
+    button_text: string | null
+    open_in_new_tab: boolean
+}
+
+interface ProductVariant {
+    id: number
+    name: string
+}
+
+interface Product {
+    id: number
+    slug: string
+    title: string
+    description: string | null
+    image: string | null
+    imageAlt: string
+    variants: ProductVariant[]
+}
+
+const props = defineProps<{
+    banner: Banner | null
+    products: Product[]
+}>()
+
+// -----------------------------------------------------------------------------
+// SEO
+// -----------------------------------------------------------------------------
+
+const seoTitle = 'Productos de madera | Industrias Husky'
+
+const seoDescription =
+    'Conoce el catálogo de Industrias Husky: madera de pino impregnada y maderas tropicales para construcción, infraestructura, industria y proyectos especiales.'
+
+const canonicalUrl = 'https://industriashusky.com.mx/productos'
+
+const absoluteUrl = (url: string | null | undefined): string | undefined => {
+    if (!url) {
+        return undefined
+    }
+
+    if (/^https?:\/\//i.test(url)) {
+        return url
+    }
+
+    return `https://industriashusky.com.mx/${url.replace(/^\/+/, '')}`
+}
+
+const ogImage = computed(
+    () =>
+        absoluteUrl(props.banner?.image_url) ||
+        'https://industriashusky.com.mx/images/og-default.jpg',
+)
+
+const collectionSchema = computed(() => ({
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: seoTitle,
+    description: seoDescription,
+    url: canonicalUrl,
+    inLanguage: 'es-MX',
+
+    isPartOf: {
+        '@type': 'WebSite',
+        name: 'Industrias Husky',
+        url: 'https://industriashusky.com.mx/',
+    },
+
+    mainEntity: {
+        '@type': 'ItemList',
+        numberOfItems: props.products.length,
+
+        itemListElement: props.products.map((product, index) => ({
+            '@type': 'ListItem',
+            position: index + 1,
+
+            item: {
+                '@type': 'Product',
+                name: product.title,
+                description: product.description || undefined,
+                image: absoluteUrl(product.image),
+                url: `${canonicalUrl}/${product.slug}`,
+            },
+        })),
+    },
+}))
+
+const collectionSchemaJson = computed(() =>
+    JSON.stringify(collectionSchema.value),
+)
+
+// -----------------------------------------------------------------------------
+// PRODUCTOS
+// -----------------------------------------------------------------------------
+
+const products = computed(() =>
+    props.products.map((product, index) => ({
+        id: product.id,
+        number: String(index + 1).padStart(2, '0'),
+        title: product.title,
+        description: product.description || '',
+        image: product.image,
+        imageAlt: product.imageAlt || product.title,
+
+        // Variantes del producto.
+        variants: product.variants ?? [],
+
+        // Cada tarjeta abre su propia ficha individual.
+        href: `/productos/${product.slug}`,
+    })),
+)
+</script>
+
+<template>
+    <Head>
+        <title>{{ seoTitle }}</title>
+
+        <meta
+            head-key="description"
+            name="description"
+            :content="seoDescription"
+        />
+
+        <!-- ROBOTS -->
+        <meta
+            head-key="robots"
+            name="robots"
+            content="index, follow"
+        />
+
+        <!-- CANONICAL -->
+        <link
+            head-key="canonical"
+            rel="canonical"
+            :href="canonicalUrl"
+        />
+
+        <meta
+            head-key="theme-color"
+            name="theme-color"
+            content="#f8f8f2"
+        />
+
+        <meta
+            head-key="author"
+            name="author"
+            content="Industrias Husky"
+        />
+
+        <meta
+            head-key="language"
+            name="language"
+            content="es-MX"
+        />
+
+        <!-- OPEN GRAPH -->
+        <meta
+            head-key="og:type"
+            property="og:type"
+            content="website"
+        />
+
+        <meta
+            head-key="og:site_name"
+            property="og:site_name"
+            content="Industrias Husky"
+        />
+
+        <meta
+            head-key="og:title"
+            property="og:title"
+            :content="seoTitle"
+        />
+
+        <meta
+            head-key="og:description"
+            property="og:description"
+            :content="seoDescription"
+        />
+
+        <meta
+            head-key="og:url"
+            property="og:url"
+            :content="canonicalUrl"
+        />
+
+        <meta
+            head-key="og:image"
+            property="og:image"
+            :content="ogImage"
+        />
+
+        <meta
+            head-key="og:image:alt"
+            property="og:image:alt"
+            content="Catálogo de productos de madera de Industrias Husky"
+        />
+
+        <meta
+            head-key="og:locale"
+            property="og:locale"
+            content="es_MX"
+        />
+
+        <!-- TWITTER -->
+        <meta
+            head-key="twitter:card"
+            name="twitter:card"
+            content="summary_large_image"
+        />
+
+        <meta
+            head-key="twitter:title"
+            name="twitter:title"
+            :content="seoTitle"
+        />
+
+        <meta
+            head-key="twitter:description"
+            name="twitter:description"
+            :content="seoDescription"
+        />
+
+        <meta
+            head-key="twitter:image"
+            name="twitter:image"
+            :content="ogImage"
+        />
+
+        <!-- DATOS ESTRUCTURADOS -->
+        <component
+            :is="'script'"
+            type="application/ld+json"
+            head-key="products-collection-schema"
+            v-html="collectionSchemaJson"
+        />
+    </Head>
+
+    <div class="husky-site">
+        <HuskyHeader />
+
+        <main>
+            <!-- PORTADA -->
+            <HuskyHero
+                :banner="props.banner"
+                scroll-target="#catalogo-productos"
+                min-height="60vh"
+            />
+
+            <!-- CATÁLOGO DE PRODUCTOS -->
+            <ItemCards
+                id="catalogo-productos"
+                variant="grid"
+                :heading-level="1"
+                :items="products"
+                eyebrow="NUESTRAS SOLUCIONES"
+                title="Productos diseñados para durar."
+                empty-text="Estamos preparando nuestro catálogo de productos."
+            />
+        </main>
+
+        <HuskyFooter />
+    </div>
+</template>

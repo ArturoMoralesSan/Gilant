@@ -1,0 +1,292 @@
+/* =========================================================
+   INDUSTRIAS HUSKY
+   ADMIN CONTENT / SIDEBAR INSET
+   Laravel + Inertia + Vue 3 + Tailwind
+   ========================================================= */
+
+/* Tipografía del landing */
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap');
+
+:root {
+    --zoo-content-bg: #f9f8f6;
+    --zoo-content-surface: #ffffff;
+    --zoo-content-border: rgba(0, 90, 37, 0.15);
+
+    --zoo-content-text: #293a30;
+    --zoo-content-muted: #69766b;
+
+    --zoo-content-radius: 14px;
+
+    /* Paleta de Industrias Husky */
+    --husky-forest: #34463a;
+    --husky-forest-deep: #223a2d;
+    --husky-burgundy: #741203;
+    --husky-olive: #005a25;
+    --husky-sage: #e7e9df;
+    --husky-linen: #f1eee8;
+    --husky-paper: #f9f8f6;
+    --husky-ink: #293a30;
+    --husky-muted: #69766b;
+    --husky-line: rgba(0, 90, 37, 0.15);
+    --husky-soft-line: rgba(0, 90, 37, 0.09);
+    --husky-accent: #d8dfd0;
+}
+
+/* =========================================================
+   CONTENEDOR PRINCIPAL
+   ========================================================= */
+
+[data-slot="sidebar-inset"] {
+    position: relative;
+    isolation: isolate;
+
+    display: flex;
+    flex: 1 1 0%;
+    flex-direction: column;
+
+    min-width: 0;
+    min-height: 100vh;
+
+    background: var(--zoo-content-bg);
+    color: var(--zoo-content-text);
+
+    font-family: 'DM Sans', sans-serif;
+
+    transition:
+        background-color 180ms ease,
+        margin 200ms ease;
+
+    margin: 0;
+    border-radius: 0;
+}
+
+/* =========================================================
+   CONTENIDO INTERNO
+   ========================================================= */
+
+[data-slot="sidebar-inset"] > * {
+    min-width: 0;
+}
+
+/* Tipografía del contenido */
+[data-slot="sidebar-inset"],
+[data-slot="sidebar-inset"] *,
+main.mx-auto.flex.h-full.w-full.max-w-7xl,
+main.mx-auto.flex.h-full.w-full.max-w-7xl * {
+    font-family: 'DM Sans', sans-serif;
+}
+
+/* Evitar que tablas, formularios y tarjetas desborden */
+[data-slot="sidebar-inset"] img,
+[data-slot="sidebar-inset"] video,
+[data-slot="sidebar-inset"] canvas {
+    max-width: 100%;
+}
+
+/* =========================================================
+   CONTENEDOR ALTERNATIVO
+   Se aplica al main cuando variant !== sidebar.
+   ========================================================= */
+
+main.mx-auto.flex.h-full.w-full.max-w-7xl {
+    position: relative;
+
+    min-width: 0;
+    min-height: 100vh;
+
+    padding: 24px;
+
+    background-color: var(--zoo-content-bg);
+    color: var(--zoo-content-text);
+
+    font-family: 'DM Sans', sans-serif;
+}
+
+/* =========================================================
+   ENCABEZADOS
+   ========================================================= */
+
+[data-slot="sidebar-inset"] h1,
+main.mx-auto.flex.h-full.w-full.max-w-7xl h1 {
+    color: var(--zoo-content-text);
+    font-family: 'Manrope', sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.035em;
+    line-height: 1.2;
+}
+
+[data-slot="sidebar-inset"] h2,
+main.mx-auto.flex.h-full.w-full.max-w-7xl h2 {
+    color: var(--zoo-content-text);
+    font-family: 'Manrope', sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+/* =========================================================
+   SUPERFICIES
+   Tarjetas, paneles y bloques.
+   ========================================================= */
+
+[data-slot="sidebar-inset"] .bg-card,
+main.mx-auto.flex.h-full.w-full.max-w-7xl .bg-card {
+    border-color: var(--zoo-content-border);
+}
+
+/* =========================================================
+   FORMULARIOS
+   ========================================================= */
+
+[data-slot="sidebar-inset"] input,
+[data-slot="sidebar-inset"] select,
+[data-slot="sidebar-inset"] textarea,
+main.mx-auto.flex.h-full.w-full.max-w-7xl input,
+main.mx-auto.flex.h-full.w-full.max-w-7xl select,
+main.mx-auto.flex.h-full.w-full.max-w-7xl textarea {
+    max-width: 100%;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--husky-ink);
+    background-color: #ffffff;
+    border-color: var(--husky-line);
+    border-radius: 10px;
+    transition:
+        border-color 250ms ease,
+        box-shadow 250ms ease,
+        background-color 250ms ease;
+}
+
+/* Placeholder */
+[data-slot="sidebar-inset"] input::placeholder,
+[data-slot="sidebar-inset"] textarea::placeholder,
+main.mx-auto.flex.h-full.w-full.max-w-7xl input::placeholder,
+main.mx-auto.flex.h-full.w-full.max-w-7xl textarea::placeholder {
+    color: var(--husky-muted);
+    opacity: 1;
+}
+
+/* Hover */
+[data-slot="sidebar-inset"] input:hover:not(:focus):not(:disabled),
+[data-slot="sidebar-inset"] select:hover:not(:focus):not(:disabled),
+[data-slot="sidebar-inset"] textarea:hover:not(:focus):not(:disabled),
+main.mx-auto.flex.h-full.w-full.max-w-7xl input:hover:not(:focus):not(:disabled),
+main.mx-auto.flex.h-full.w-full.max-w-7xl select:hover:not(:focus):not(:disabled),
+main.mx-auto.flex.h-full.w-full.max-w-7xl textarea:hover:not(:focus):not(:disabled) {
+    border-color: rgba(0, 90, 37, 0.35);
+}
+
+/* Foco */
+[data-slot="sidebar-inset"] input:focus,
+[data-slot="sidebar-inset"] select:focus,
+[data-slot="sidebar-inset"] textarea:focus,
+main.mx-auto.flex.h-full.w-full.max-w-7xl input:focus,
+main.mx-auto.flex.h-full.w-full.max-w-7xl select:focus,
+main.mx-auto.flex.h-full.w-full.max-w-7xl textarea:focus {
+    border-color: var(--husky-olive);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 90, 37, 0.1);
+    background-color: #ffffff;
+}
+
+
+
+/* Campos deshabilitados */
+[data-slot="sidebar-inset"] input:disabled,
+[data-slot="sidebar-inset"] select:disabled,
+[data-slot="sidebar-inset"] textarea:disabled,
+main.mx-auto.flex.h-full.w-full.max-w-7xl input:disabled,
+main.mx-auto.flex.h-full.w-full.max-w-7xl select:disabled,
+main.mx-auto.flex.h-full.w-full.max-w-7xl textarea:disabled {
+    background-color: var(--husky-linen);
+    color: var(--husky-muted);
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+/* =========================================================
+   TABLAS
+   ========================================================= */
+
+[data-slot="sidebar-inset"] table,
+main.mx-auto.flex.h-full.w-full.max-w-7xl table {
+    width: 100%;
+    max-width: 100%;
+    border-color: var(--zoo-content-border);
+}
+
+/* Permitir desplazamiento horizontal en tablas anchas.
+   El wrapper de la tabla conserva su comportamiento. */
+
+[data-slot="sidebar-inset"] th,
+main.mx-auto.flex.h-full.w-full.max-w-7xl th {
+    color: var(--zoo-content-muted);
+    font-weight: 600;
+}
+
+/* =========================================================
+   ENLACES
+   ========================================================= */
+
+[data-slot="sidebar-inset"] a,
+main.mx-auto.flex.h-full.w-full.max-w-7xl a {
+    text-underline-offset: 3px;
+}
+
+/* =========================================================
+   RESPONSIVE — TABLET
+   ========================================================= */
+
+@media (max-width: 1023px) {
+    main.mx-auto.flex.h-full.w-full.max-w-7xl {
+        padding: 20px;
+    }
+}
+
+/* =========================================================
+   RESPONSIVE — MÓVIL
+   ========================================================= */
+
+@media (max-width: 767px) {
+    [data-slot="sidebar-inset"] {
+        width: 100%;
+        min-width: 0;
+        min-height: 100dvh;
+    }
+
+    main.mx-auto.flex.h-full.w-full.max-w-7xl {
+        width: 100%;
+        min-width: 0;
+        min-height: 100dvh;
+
+        padding: 14px;
+        gap: 14px;
+    }
+
+    [data-slot="sidebar-inset"] h1,
+    main.mx-auto.flex.h-full.w-full.max-w-7xl h1 {
+        font-size: clamp(1.25rem, 5vw, 1.65rem);
+    }
+
+    /* Mantener tablas utilizables en pantallas pequeñas */
+    [data-slot="sidebar-inset"] table,
+    main.mx-auto.flex.h-full.w-full.max-w-7xl table {
+        white-space: nowrap;
+    }
+}
+
+/* =========================================================
+   ACCESIBILIDAD
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+    [data-slot="sidebar-inset"] {
+        transition: none !important;
+    }
+}
+
+/* =========================================================
+   HEADER BLANCO
+   ========================================================= */
+
+[data-slot="sidebar-inset"] header {
+    background-color: #ffffff !important;
+}
