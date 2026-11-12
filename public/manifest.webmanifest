@@ -1,16 +1,16 @@
 
 {
     "id": "/",
-    "name": "Industrias Husky",
-    "short_name": "Husky",
-    "description": "Soluciones en madera, maquinaria y productos industriales.",
+    "name": "Grupo Gilant",
+    "short_name": "Gilant",
+    "description": "Construcción en madera estructural y obras exteriores.",
     "lang": "es-MX",
     "start_url": "/",
     "scope": "/",
     "display": "standalone",
     "orientation": "portrait",
-    "background_color": "#f5f3ec",
-    "theme_color": "#243b30",
+    "background_color": "#FFFFFF",
+    "theme_color": "#0B2B20",
     "categories": [
         "business",
         "productivity"
