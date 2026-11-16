@@ -11,9 +11,9 @@ import {
     X,
 } from 'lucide-vue-next'
 
-import GilantFooter from '@/Components/GilantFooter.vue'
-import GilantHeader from '@/Components/GilantHeader.vue'
-import GilantHero from '@/Components/GilantHero.vue'
+import GilantFooter from '@/components/GilantFooter.vue'
+import GilantHeader from '@/components/GilantHeader.vue'
+import GilantHero from '@/components/GilantHero.vue'
 
 import '../../css/gilant-landing.css'
 

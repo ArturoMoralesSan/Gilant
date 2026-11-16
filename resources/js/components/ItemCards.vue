@@ -9,7 +9,7 @@ import {
     TreeDeciduous,
 } from 'lucide-vue-next'
 
-import ImageGallery from '@/Components/ImageGallery.vue'
+import ImageGallery from '@/components/ImageGallery.vue'
 
 type SectionPadding = 'none' | 'sm' | 'md' | 'lg' | 'xl'
 type GalleryPosition = 'left' | 'right'

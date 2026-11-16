@@ -227,6 +227,26 @@ public function index(): Response
 
     /*
     |--------------------------------------------------------------------------
+    | Opciones del formulario de cotización (catálogo completo)
+    |--------------------------------------------------------------------------
+    */
+
+    $quoteOptions = [
+        'products' => Product::query()
+            ->where('is_active', true)
+            ->orderBy('sort_order')
+            ->orderBy('id')
+            ->get(['id', 'name']),
+
+        'services' => Service::query()
+            ->where('is_active', true)
+            ->orderBy('sort_order')
+            ->orderBy('id')
+            ->get(['id', 'name']),
+    ];
+
+    /*
+    |--------------------------------------------------------------------------
     | Respuesta Inertia
     |--------------------------------------------------------------------------
     */
@@ -239,6 +259,7 @@ public function index(): Response
         'clients' => $clients,
         'contact' => $contact,
         'about' => $about,
+        'quoteOptions' => $quoteOptions,
     ]);
 }
 

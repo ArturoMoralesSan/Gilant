@@ -1,9 +1,6 @@
 <script setup lang="ts">
-import { Link, usePage } from '@inertiajs/vue3';
+import { Link } from '@inertiajs/vue3';
 import { home } from '@/routes';
-
-const page = usePage();
-const name = page.props.name;
 
 defineProps<{
     title?: string;
@@ -12,83 +9,81 @@ defineProps<{
 </script>
 
 <template>
-    <div class="relative grid min-h-svh bg-[#f9f8f6] lg:grid-cols-2">
+    <div class="relative grid min-h-svh bg-[#F7F4EC] lg:grid-cols-2">
         <!-- PANEL VISUAL -->
         <aside
-            class="relative hidden min-h-svh flex-col justify-between overflow-hidden bg-[#223A2D] p-10 text-white lg:flex xl:p-14"
+            class="relative hidden min-h-svh flex-col justify-between overflow-hidden bg-[#123D2D] p-10 text-white lg:flex xl:p-14"
         >
             <!-- Imagen de fondo -->
             <div
                 class="absolute inset-0 bg-cover bg-center"
-                style="
-                    background-image: url('/images/husky-instalaciones.jpg');
-                "
+                style="background-image: url('/images/login.jpeg')"
             />
 
-            <!-- Capa verde sobre la fotografía -->
+            <!-- Capa verde Gilant sobre la fotografía -->
             <div
-                class="absolute inset-0 bg-gradient-to-b from-[#223A2D]/85 via-[#223A2D]/65 to-[#223A2D]/95"
+                class="absolute inset-0 bg-gradient-to-b from-[#0B2B20]/85 via-[#123D2D]/60 to-[#0B2B20]/95"
             />
 
             <!-- Decoración -->
             <div
-                class="pointer-events-none absolute -right-36 -top-32 size-[440px] rounded-full border border-white/[0.08]"
+                class="pointer-events-none absolute -right-36 -top-32 size-[440px] rounded-full border border-[#C49A5A]/[0.18]"
             />
 
             <div
-                class="pointer-events-none absolute -right-20 -top-16 size-[300px] rounded-full border border-white/[0.08]"
+                class="pointer-events-none absolute -right-20 -top-16 size-[300px] rounded-full border border-[#C49A5A]/[0.12]"
             />
 
-            <!-- Logo de Husky -->
+            <!-- Logotipo Gilant -->
             <Link
                 :href="home()"
                 class="relative z-10 inline-flex w-fit items-center"
+                aria-label="Grupo Gilant, ir al inicio"
             >
-                <img
-                    src="/images/husky_blanco.webp"
-                    :alt="name"
-                    class="h-auto w-48 object-contain sm:w-56"
-                />
+                <span
+                    class="text-4xl font-semibold uppercase tracking-[0.22em] text-[#F7F4EC]"
+                >
+                    Gilant
+                </span>
             </Link>
 
             <!-- Mensaje principal -->
             <div class="relative z-10 max-w-xl py-12">
                 <div
-                    class="mb-7 inline-flex items-center gap-2.5 rounded-full border border-white/15 bg-white/[0.06] px-4 py-2"
+                    class="mb-7 inline-flex items-center gap-2.5 rounded-full border border-[#C49A5A]/30 bg-white/[0.06] px-4 py-2"
                 >
-                    <span class="size-2 rounded-full bg-[#D8DFD0]" />
+                    <span class="size-2 rounded-full bg-[#C49A5A]" />
 
                     <span
-                        class="text-xs font-medium tracking-[0.12em] text-[#E7E9DF]"
+                        class="text-xs font-medium tracking-[0.12em] text-[#F7F4EC]"
                     >
-                        CALIDAD Y COMPROMISO
+                        GRUPO GILANT DEL NOROESTE, S.A. DE C.V.
                     </span>
                 </div>
 
                 <h2
                     class="max-w-lg text-4xl font-medium leading-[1.15] tracking-tight xl:text-5xl"
                 >
-                    Calidad que nace
-                    <span class="block text-[#D8DFD0]">
-                        de la madera.
+                    Construcción en madera estructural
+                    <span class="block text-[#C49A5A]">
+                        y obras exteriores.
                     </span>
                 </h2>
 
-                <p class="mt-6 max-w-md text-base leading-7 text-white/75">
-                    Experiencia, trabajo y compromiso en cada corte,
-                    transformando la madera en soluciones para cada proyecto.
-                </p>
+                <div class="mt-9 h-[3px] w-14 rounded-full bg-[#C49A5A]" />
 
-                <div
-                    class="mt-9 h-[3px] w-14 rounded-full bg-[#D8DFD0]"
-                />
+                <p
+                    class="mt-6 text-sm font-medium tracking-[0.25em] text-[#F7F4EC]/80"
+                >
+                    NATURALEZA &nbsp;·&nbsp; DISEÑO &nbsp;·&nbsp; DURABILIDAD
+                </p>
             </div>
 
             <!-- Pie del panel -->
             <div
-                class="relative z-10 flex items-center justify-between gap-4 border-t border-white/10 pt-5 text-xs text-white/60"
+                class="relative z-10 flex items-center justify-between gap-4 border-t border-[#F7F4EC]/15 pt-5 text-xs text-[#F7F4EC]/60"
             >
-                <span>{{ name }}</span>
+                <span>Grupo Gilant del Noroeste</span>
                 <span>Acceso seguro a tu cuenta</span>
             </div>
         </aside>
@@ -98,56 +93,60 @@ defineProps<{
             class="flex min-h-svh flex-col items-center justify-center px-5 py-10 sm:px-8 lg:px-10 xl:px-14"
         >
             <div class="w-full max-w-[440px]">
-                <!-- Logo en móvil -->
+                <!-- Logotipo en móvil -->
                 <Link
                     :href="home()"
-                    class="mb-8 flex items-center justify-center lg:hidden"
+                    class="mb-8 flex flex-col items-center justify-center gap-1 lg:hidden"
+                    aria-label="Grupo Gilant, ir al inicio"
                 >
-                    <img
-                        src="/images/industriashusky.webp"
-                        :alt="name"
-                        class="h-auto w-48 object-contain"
-                    />
+                    <span
+                        class="text-3xl font-semibold uppercase tracking-[0.22em] text-[#123D2D]"
+                    >
+                        Gilant
+                    </span>
+
+                    <span
+                        class="text-[10px] font-medium tracking-[0.25em] text-[#71845B]"
+                    >
+                        NATURALEZA · DISEÑO · DURABILIDAD
+                    </span>
                 </Link>
 
                 <!-- CARD DEL FORMULARIO -->
                 <section
-                    class="overflow-hidden rounded-2xl border border-[#005A25]/[0.12] bg-white shadow-[0_12px_45px_rgba(34,58,45,0.06)]"
+                    class="overflow-hidden rounded-2xl border border-[#123D2D]/[0.12] bg-white shadow-[0_12px_45px_rgba(11,43,32,0.08)]"
                 >
                     <!-- Encabezado -->
                     <div
-                        class="border-b border-[#005A25]/[0.08] px-6 pb-6 pt-8 sm:px-9 sm:pt-9"
+                        class="border-b border-[#123D2D]/[0.08] px-6 pb-6 pt-8 sm:px-9 sm:pt-9"
                     >
-
                         <h1
                             v-if="title"
-                            class="text-2xl font-semibold tracking-tight text-[#34463A] sm:text-[28px]"
+                            class="text-2xl font-semibold tracking-tight text-[#123D2D] sm:text-[28px]"
                         >
                             {{ title }}
                         </h1>
 
                         <p
                             v-if="description"
-                            class="mt-2 text-sm leading-6 text-[#69766B]"
+                            class="mt-2 text-sm leading-6 text-[#747B73]"
                         >
                             {{ description }}
                         </p>
                     </div>
 
                     <!-- Formulario original -->
-                    <div
-                        class="auth-form px-6 py-7 sm:px-9 sm:py-8"
-                    >
+                    <div class="auth-form px-6 py-7 sm:px-9 sm:py-8">
                         <slot />
                     </div>
                 </section>
 
                 <!-- Pie -->
                 <p
-                    class="mt-7 px-3 text-center text-xs leading-5 text-[#69766B]"
+                    class="mt-7 px-3 text-center text-xs leading-5 text-[#747B73]"
                 >
-                    © {{ new Date().getFullYear() }} {{ name }}.
-                    Todos los derechos reservados.
+                    © {{ new Date().getFullYear() }} Grupo Gilant del Noroeste,
+                    S.A. de C.V. Todos los derechos reservados.
                 </p>
             </div>
         </main>
@@ -155,10 +154,10 @@ defineProps<{
 </template>
 
 <style>
-/* Botones verdes dentro del formulario */
+/* Botones con colores Gilant dentro del formulario */
 .auth-form [type='submit'] {
-    background-color: #3b6850;
-    border-color: #3b6850;
+    background-color: #123d2d;
+    border-color: #123d2d;
     color: #ffffff;
     transition:
         background-color 180ms ease,
@@ -166,23 +165,24 @@ defineProps<{
 }
 
 .auth-form [type='submit']:hover {
-    background-color: #00451c;
-    border-color: #00451c;
+    background-color: #0b2b20;
+    border-color: #0b2b20;
 }
 
 .auth-form [type='submit']:focus-visible {
-    outline: 2px solid #3b6850;
+    outline: 2px solid #c49a5a;
     outline-offset: 3px;
 }
+
 /* Títulos del formulario */
 .auth-form h1,
 .auth-form h2,
 .auth-form h3 {
-    color: #223a2d;
+    color: #123d2d;
 }
 
 /* Labels de los campos */
 .auth-form label {
-    color: #223a2d;
+    color: #123d2d;
 }
 </style>

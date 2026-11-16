@@ -41,7 +41,7 @@
        TIPOGRAFÍA
     ===================================================== */
 
-    --gilant-font-heading: inherit;
+    --gilant-font-heading: 'Manrope', sans-serif;
     --gilant-font-body: inherit;
 
     --gilant-text-xs: 0.75rem;

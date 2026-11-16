@@ -11,8 +11,8 @@ import {
     TreeDeciduous,
 } from 'lucide-vue-next'
 
-import GilantHeader from '@/Components/GilantHeader.vue'
-import GilantFooter from '@/Components/GilantFooter.vue'
+import GilantHeader from '@/components/GilantHeader.vue'
+import GilantFooter from '@/components/GilantFooter.vue'
 
 import '../../css/gilant-landing.css'
 

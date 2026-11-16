@@ -1,32 +1,32 @@
 /* =========================================================
-   HUSKY SIDEBAR
-   Fondo principal: #34463A
-   Hover de elementos: #F1EEE8
-   Elemento activo: #E7E9DF
-   Iconos blancos solo dentro de la sidebar
+   GILANT SIDEBAR
+   Fondo principal: verde bosque #123D2D
+   Hover de elementos: arena #F3ECDD
+   Elemento activo: crema #F7F4EC con acento dorado
+   Iconos crema solo dentro de la sidebar
    ========================================================= */
 
 :root {
-    --husky-forest: #34463A;
-    --husky-forest-deep: #223A2D;
-    --husky-burgundy: #741203;
-    --husky-green: #005A25;
-    --husky-green-light: #E7E9DF;
-    --husky-green-soft: #F4F6F1;
-    --husky-sage: #E7E9DF;
-    --husky-linen: #F1EEE8;
-    --husky-paper: #F9F8F6;
-    --husky-ink: #293A30;
+    --husky-forest: #123D2D;
+    --husky-forest-deep: #0B2B20;
+    --husky-burgundy: #A4523A;
+    --husky-green: #123D2D;
+    --husky-green-light: #EFE8D8;
+    --husky-green-soft: #F7F4EC;
+    --husky-sage: #E9EDE4;
+    --husky-linen: #F3ECDD;
+    --husky-paper: #FFFEFA;
+    --husky-ink: #1C211D;
     --husky-muted: #ebebeb;
-    --husky-line: rgba(255, 255, 255, 0.15);
-    --husky-soft-line: rgba(255, 255, 255, 0.09);
-    --husky-accent: #D8DFD0;
+    --husky-line: rgba(247, 244, 236, 0.15);
+    --husky-soft-line: rgba(247, 244, 236, 0.09);
+    --husky-accent: #C49A5A;
 
-    --husky-sidebar-bg: #34463A;
-    --husky-sidebar-text: #F9F8F6;
-    --husky-sidebar-muted: #D8DFD0;
-    --husky-sidebar-hover: #f1eee8e0;
-    --husky-sidebar-active: #f1eee8e0;
+    --husky-sidebar-bg: #123D2D;
+    --husky-sidebar-text: #F7F4EC;
+    --husky-sidebar-muted: #CFC6B2;
+    --husky-sidebar-hover: #F3ECDD;
+    --husky-sidebar-active: #F7F4EC;
 }
 
 /* =========================================================
@@ -75,6 +75,30 @@
 [data-sidebar="header"] a:hover,
 [data-slot="sidebar-header"] a:hover {
     background-color: transparent !important;
+}
+
+/* Logo: sin fondo ni opacidad en hover/activo, solo realce dorado */
+[data-slot="sidebar-header"] [data-slot="sidebar-menu-button"],
+[data-slot="sidebar-header"] [data-slot="sidebar-menu-button"]:hover,
+[data-slot="sidebar-header"] [data-slot="sidebar-menu-button"][data-active="true"],
+[data-sidebar="header"] [data-sidebar="menu-button"],
+[data-sidebar="header"] [data-sidebar="menu-button"]:hover,
+[data-sidebar="header"] [data-sidebar="menu-button"][data-active="true"] {
+    background-color: transparent !important;
+    color: var(--husky-sidebar-text) !important;
+    box-shadow: none !important;
+    opacity: 1 !important;
+}
+
+[data-slot="sidebar-header"] [data-slot="sidebar-menu-button"] span,
+[data-sidebar="header"] [data-sidebar="menu-button"] span {
+    color: var(--husky-sidebar-text) !important;
+    transition: color 180ms ease;
+}
+
+[data-slot="sidebar-header"] [data-slot="sidebar-menu-button"]:hover span,
+[data-sidebar="header"] [data-sidebar="menu-button"]:hover span {
+    color: var(--husky-accent) !important;
 }
 
 
@@ -169,7 +193,7 @@
     color: var(--husky-forest-deep) !important;
     border-color: transparent !important;
     font-weight: 600;
-    box-shadow: none !important;
+    box-shadow: inset 3px 0 0 var(--husky-accent) !important;
 }
 
 /* Hover del elemento activo */
@@ -206,7 +230,7 @@
 [data-sidebar="menu-sub"],
 [data-slot="sidebar-menu-sub"] {
     background-color: transparent !important;
-    border-left-color: #f1eee838 !important;
+    border-left-color: rgba(196, 154, 90, 0.3) !important;
 }
 
 /* Enlaces de submenú */
@@ -245,6 +269,7 @@
     background-color: var(--husky-sidebar-active) !important;
     color: var(--husky-forest-deep) !important;
     font-weight: 600;
+    box-shadow: inset 3px 0 0 var(--husky-accent) !important;
 }
 
 /* =========================================================
@@ -308,7 +333,7 @@
 [data-sidebar="input"]::placeholder,
 [data-slot="sidebar-input"]::placeholder,
 [data-sidebar="search-input"]::placeholder {
-    color: rgba(249, 248, 246, 0.65) !important;
+    color: rgba(247, 244, 236, 0.65) !important;
 }
 
 [data-sidebar="input"]:focus,
@@ -489,74 +514,74 @@
    Activo: #34463A
    ========================================================= */
 
-/* Iconos blancos por defecto dentro de la sidebar */
+/* Iconos crema por defecto dentro de la sidebar */
 [data-sidebar="sidebar"] svg,
 [data-slot="sidebar"] svg {
-    color: #F9F8F6;
+    color: var(--husky-sidebar-text);
 }
 
 /* Iconos de los elementos del menú */
 [data-sidebar="sidebar"] [data-sidebar="menu-button"] svg,
 [data-slot="sidebar"] [data-slot="sidebar-menu-button"] svg {
-    color: #F9F8F6 !important;
+    color: var(--husky-sidebar-text) !important;
 }
 
 /* Iconos al pasar el cursor */
 [data-sidebar="sidebar"] [data-sidebar="menu-button"]:hover svg,
 [data-slot="sidebar"] [data-slot="sidebar-menu-button"]:hover svg {
-    color: #34463A !important;
+    color: var(--husky-forest) !important;
 }
 
-/* Iconos del componente activo */
+/* Iconos del componente activo (dorado) */
 [data-sidebar="sidebar"] [data-sidebar="menu-button"][data-active="true"] svg,
 [data-slot="sidebar"] [data-slot="sidebar-menu-button"][data-active="true"] svg,
 [data-sidebar="sidebar"] [data-sidebar="menu-button"][aria-current="page"] svg,
 [data-slot="sidebar"] [data-slot="sidebar-menu-button"][aria-current="page"] svg {
-    color: #34463A !important;
+    color: #A98145 !important;
 }
 
 /* Iconos de submenús */
 [data-sidebar="sidebar"] [data-sidebar="menu-sub-button"] svg,
 [data-slot="sidebar"] [data-slot="sidebar-menu-sub-button"] svg {
-    color: #D8DFD0 !important;
+    color: var(--husky-sidebar-muted) !important;
 }
 
-/* Iconos del submenú activo */
+/* Iconos del submenú activo (dorado) */
 [data-sidebar="sidebar"] [data-sidebar="menu-sub-button"][data-active="true"] svg,
 [data-slot="sidebar"] [data-slot="sidebar-menu-sub-button"][data-active="true"] svg,
 [data-sidebar="sidebar"] [data-sidebar="menu-sub-button"][aria-current="page"] svg,
 [data-slot="sidebar"] [data-slot="sidebar-menu-sub-button"][aria-current="page"] svg {
-    color: #34463A !important;
+    color: #A98145 !important;
 }
 
 /* Iconos del submenú al pasar el cursor */
 [data-sidebar="sidebar"] [data-sidebar="menu-sub-button"]:hover svg,
 [data-slot="sidebar"] [data-slot="sidebar-menu-sub-button"]:hover svg {
-    color: #34463A !important;
+    color: var(--husky-forest) !important;
 }
 
 /* Iconos del encabezado */
 [data-sidebar="sidebar"] [data-sidebar="header"] svg,
 [data-slot="sidebar"] [data-slot="sidebar-header"] svg {
-    color: #F9F8F6;
+    color: var(--husky-sidebar-text);
 }
 
 /* Iconos del footer */
 [data-sidebar="sidebar"] [data-sidebar="footer"] svg,
 [data-slot="sidebar"] [data-slot="sidebar-footer"] svg {
-    color: #F9F8F6;
+    color: var(--husky-sidebar-text);
 }
 
 /* Iconos del control para expandir o contraer */
 [data-sidebar="sidebar"] [data-sidebar="trigger"] svg,
 [data-slot="sidebar"] [data-slot="sidebar-trigger"] svg {
-    color: #F9F8F6;
+    color: var(--husky-sidebar-text);
 }
 
 /* Hover del control para expandir o contraer */
 [data-sidebar="sidebar"] [data-sidebar="trigger"]:hover svg,
 [data-slot="sidebar"] [data-slot="sidebar-trigger"]:hover svg {
-    color: #34463A !important;
+    color: var(--husky-forest) !important;
 }
 
 /* =========================================================

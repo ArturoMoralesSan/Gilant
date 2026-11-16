@@ -2,10 +2,10 @@
 import { computed } from 'vue'
 import { Head } from '@inertiajs/vue3'
 
-import GilantFooter from '@/Components/GilantFooter.vue'
-import GilantHeader from '@/Components/GilantHeader.vue'
-import GilantHero from '@/Components/GilantHero.vue'
-import ItemCards from '@/Components/ItemCards.vue'
+import GilantFooter from '@/components/GilantFooter.vue'
+import GilantHeader from '@/components/GilantHeader.vue'
+import GilantHero from '@/components/GilantHero.vue'
+import ItemCards from '@/components/ItemCards.vue'
 
 import '../../css/gilant-landing.css'
 

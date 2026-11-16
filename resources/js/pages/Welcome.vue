@@ -16,10 +16,10 @@ import {
 } from 'lucide-vue-next'
 import { computed, nextTick, onMounted, ref } from 'vue'
 
-import GilantFooter from '@/Components/GilantFooter.vue'
-import GilantHeader from '@/Components/GilantHeader.vue'
-import GilantHero from '@/Components/GilantHero.vue'
-import ItemCards from '@/Components/ItemCards.vue'
+import GilantFooter from '@/components/GilantFooter.vue'
+import GilantHeader from '@/components/GilantHeader.vue'
+import GilantHero from '@/components/GilantHero.vue'
+import ItemCards from '@/components/ItemCards.vue'
 
 import '../../css/gilant-landing.css'
 
@@ -49,9 +49,23 @@ interface Product {
     name: string
     slug: string
     short_description: string | null
+    material: string | null
+    treatment: string | null
+    retention: string | null
+    retention_unit: string | null
     image_url: string | null
     image_alt: string
     variants: ProductVariant[]
+}
+
+interface QuoteOption {
+    id: number
+    name: string
+}
+
+interface QuoteOptions {
+    products: QuoteOption[]
+    services: QuoteOption[]
 }
 
 interface Service {
@@ -112,6 +126,7 @@ const props = defineProps<{
     clients: Client[]
     contact: Contact | null
     about: About | null
+    quoteOptions: QuoteOptions
 }>()
 
 // -----------------------------------------------------------------------------
@@ -125,7 +140,7 @@ const seoDescription =
 
 const canonicalUrl = 'https://gilant.com.mx/'
 
-const ogImage = 'https://gilant.com.mx/images/og-default.jpg'
+const ogImage = 'https://gilant.com.mx/og-default.jpg'
 
 const organizationSchema = computed(() => ({
     '@context': 'https://schema.org',
@@ -150,6 +165,7 @@ const organizationSchemaJson = computed(() =>
 // COTIZACIONES
 // -----------------------------------------------------------------------------
 
+const quoteFormRef = ref<HTMLFormElement | null>(null)
 const selectedItem = ref('')
 const toastVisible = ref(false)
 const toastMessage = ref('')
@@ -189,7 +205,7 @@ onMounted(async () => {
         Number.isInteger(productId) &&
         productId > 0
     ) {
-        const productExists = props.products.some(
+        const productExists = props.quoteOptions.products.some(
             product => product.id === productId,
         )
 
@@ -201,7 +217,7 @@ onMounted(async () => {
         Number.isInteger(serviceId) &&
         serviceId > 0
     ) {
-        const serviceExists = props.services.some(
+        const serviceExists = props.quoteOptions.services.some(
             service => service.id === serviceId,
         )
 
@@ -254,9 +270,7 @@ function closeToast() {
 // -----------------------------------------------------------------------------
 
 function submitQuote() {
-    const form = document.querySelector<HTMLFormElement>(
-        '#gilant-quote-form',
-    )
+    const form = quoteFormRef.value
 
     if (!form || !form.reportValidity()) {
         return
@@ -270,7 +284,7 @@ function submitQuote() {
     quoteForm.item_name = ''
 
     if (type === 'product' && selectedId) {
-        const product = props.products.find(
+        const product = props.quoteOptions.products.find(
             item => item.id === selectedId,
         )
 
@@ -285,7 +299,7 @@ function submitQuote() {
         quoteForm.product_id = product.id
         quoteForm.item_name = product.name
     } else if (type === 'service' && selectedId) {
-        const service = props.services.find(
+        const service = props.quoteOptions.services.find(
             item => item.id === selectedId,
         )
 
@@ -694,7 +708,7 @@ function phoneUrl(phone: string) {
 
                 <div
                     v-else
-                    class="gilant-products-empty"
+                    class="gilant-clients-empty"
                 >
                     <TreeDeciduous
                         :size="34"
@@ -872,6 +886,7 @@ function phoneUrl(phone: string) {
 
                     <form
                         id="gilant-quote-form"
+                        ref="quoteFormRef"
                         class="gilant-quote-form"
                         @submit.prevent="submitQuote"
                     >
@@ -970,11 +985,11 @@ function phoneUrl(phone: string) {
                                     </option>
 
                                     <optgroup
-                                        v-if="props.products.length"
+                                        v-if="props.quoteOptions.products.length"
                                         label="Productos"
                                     >
                                         <option
-                                            v-for="product in props.products"
+                                            v-for="product in props.quoteOptions.products"
                                             :key="`product-${product.id}`"
                                             :value="`product:${product.id}`"
                                         >
@@ -983,11 +998,11 @@ function phoneUrl(phone: string) {
                                     </optgroup>
 
                                     <optgroup
-                                        v-if="props.services.length"
+                                        v-if="props.quoteOptions.services.length"
                                         label="Servicios"
                                     >
                                         <option
-                                            v-for="service in props.services"
+                                            v-for="service in props.quoteOptions.services"
                                             :key="`service-${service.id}`"
                                             :value="`service:${service.id}`"
                                         >
@@ -1141,137 +1156,6 @@ function phoneUrl(phone: string) {
 
 <style scoped>
 /* =========================================================
-   MARCAS / PARTNERS
-========================================================= */
-
-.gilant-partner-brands {
-    width: 100%;
-    padding: 3.25rem 0 0;
-    overflow: hidden;
-    background: #fffefa;
-}
-
-.gilant-partner-brands-heading {
-    max-width: 760px;
-    margin: 0 auto;
-    padding: 0 1.5rem 2rem;
-    text-align: center;
-}
-
-.gilant-partner-brands-heading .gilant-eyebrow {
-    margin-bottom: 0.65rem;
-}
-
-.gilant-partner-brands-heading h2 {
-    margin: 0;
-    color: #25352d;
-    font-family: 'Manrope', sans-serif;
-    font-size: clamp(1.55rem, 2.5vw, 2.25rem);
-    font-weight: 600;
-    line-height: 1.2;
-}
-
-.gilant-partner-brands-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    width: 100%;
-}
-
-.gilant-partner-brand {
-    display: flex;
-    min-height: 285px;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 2.25rem clamp(1.25rem, 4vw, 4rem);
-    color: #fff;
-    text-align: center;
-    text-decoration: none;
-    transition: filter 220ms ease;
-}
-
-.gilant-partner-brand:hover {
-    color: #fff;
-    filter: brightness(1.06);
-}
-
-.gilant-partner-brand-camo {
-    background: #e87524;
-}
-
-.gilant-partner-brand-norwood {
-    background: #34463a;
-}
-
-.gilant-partner-brand-kicker {
-    margin-bottom: 0.8rem;
-    color: rgb(255 255 255 / 78%);
-    font-size: 0.66rem;
-    font-weight: 700;
-    letter-spacing: 0.19em;
-}
-
-.gilant-partner-brand-logo {
-    display: block;
-    width: auto;
-    max-width: min(100%, 220px);
-    height: clamp(2.8rem, 4.5vw, 3.6rem);
-    object-fit: contain;
-    object-position: left center;
-}
-
-.gilant-partner-brand-logo-camo {
-    max-width: min(100%, 205px);
-}
-
-.gilant-partner-brand-logo-norwood {
-    max-width: min(100%, 220px);
-}
-
-.gilant-partner-brand-description {
-    max-width: 390px;
-    margin-top: 0.75rem;
-    color: rgb(255 255 255 / 88%);
-    font-size: 0.9rem;
-    line-height: 1.55;
-}
-
-.gilant-partner-brand-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.45rem;
-    margin-top: 1.1rem;
-    color: #fff;
-    font-size: 0.78rem;
-    font-weight: 700;
-}
-
-@media (max-width: 700px) {
-    .gilant-partner-brands {
-        padding-top: 2.5rem;
-    }
-
-    .gilant-partner-brands-heading {
-        padding-bottom: 1.5rem;
-    }
-
-    .gilant-partner-brands-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .gilant-partner-brand {
-        min-height: 235px;
-        padding: 2rem 1.25rem;
-    }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .gilant-partner-brand {
-        transition: none;
-    }
-}
-
-/* =========================================================
    LAYOUT GLOBAL DE LA LANDING
 ========================================================= */
 
@@ -1341,7 +1225,7 @@ function phoneUrl(phone: string) {
 .gilant-clients-heading h2 {
     margin: 0;
     color: #25352d;
-    font-family: 'Manrope', sans-serif;
+    font-family: var(--gilant-font-heading);
     font-size: clamp(1.8rem, 3vw, 2.5rem);
     font-weight: 600;
     line-height: 1.2;
@@ -1360,8 +1244,8 @@ function phoneUrl(phone: string) {
     align-items: center;
     justify-content: center;
     min-width: 0;
-    min-height: 220px;
-    padding: 40px;
+    min-height: 150px;
+    padding: 24px 32px;
     border-right: 1px solid #e8e7df;
     transition: background 250ms ease;
 }
@@ -1371,14 +1255,14 @@ function phoneUrl(phone: string) {
 }
 
 .gilant-client-logo:hover {
-    background: #f7f4ec;
+    background: var(--gilant-cream);
 }
 
 .gilant-client-logo img {
     display: block;
     width: 100%;
     max-width: 190px;
-    height: 90px;
+    height: 72px;
     object-fit: contain;
     object-position: center;
     filter: grayscale(100%);
@@ -1395,13 +1279,28 @@ function phoneUrl(phone: string) {
     transform: scale(1.04);
 }
 
+.gilant-clients-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 0 24px 90px;
+    color: var(--gilant-olive);
+    text-align: center;
+}
+
+.gilant-clients-empty p {
+    margin: 0;
+    color: var(--gilant-text-light);
+}
+
 .gilant-client-placeholder {
     display: flex;
     align-items: center;
     justify-content: center;
     width: 58px;
     height: 58px;
-    color: #71845b;
+    color: var(--gilant-olive);
     border: 1px solid #e8e7df;
     border-radius: 50%;
 }
@@ -1412,7 +1311,7 @@ function phoneUrl(phone: string) {
     }
 
     .gilant-client-logo {
-        min-height: 190px;
+        min-height: 130px;
         border-bottom: 1px solid #e8e7df;
     }
 
@@ -1439,13 +1338,13 @@ function phoneUrl(phone: string) {
     }
 
     .gilant-client-logo {
-        min-height: 150px;
-        padding: 25px;
+        min-height: 110px;
+        padding: 18px;
     }
 
     .gilant-client-logo img {
         max-width: 145px;
-        height: 65px;
+        height: 52px;
     }
 }
 
@@ -1471,7 +1370,7 @@ function phoneUrl(phone: string) {
     min-height: 900px;
     padding: 100px 24px;
     overflow: hidden;
-    background-color: #123d2d;
+    background-color: var(--gilant-forest);
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -1502,7 +1401,7 @@ function phoneUrl(phone: string) {
 
 .gilant-contact-eyebrow {
     margin: 0 0 16px;
-    color: #c49a5a;
+    color: var(--gilant-gold);
     font-size: 0.68rem;
     font-weight: 800;
     letter-spacing: 0.22em;
@@ -1511,7 +1410,7 @@ function phoneUrl(phone: string) {
 .gilant-contact-heading h2 {
     margin: 0;
     color: #fff;
-    font-family: 'Manrope', sans-serif;
+    font-family: var(--gilant-font-heading);
     font-size: clamp(2rem, 4vw, 3.1rem);
     font-weight: 600;
     line-height: 1.12;
@@ -1563,7 +1462,7 @@ a.gilant-contact-information-item:hover {
     justify-content: center;
     width: 38px;
     height: 38px;
-    color: #c49a5a;
+    color: var(--gilant-gold);
     background: rgba(196, 154, 90, 0.12);
     border-radius: 50%;
 }
@@ -1652,7 +1551,7 @@ a.gilant-contact-information-item:hover {
 .gilant-contact-social-links a:hover {
     color: #fff;
     background: rgba(196, 154, 90, 0.2);
-    border-color: #c49a5a;
+    border-color: var(--gilant-gold);
 }
 
 /* Separador */
@@ -1669,7 +1568,7 @@ a.gilant-contact-information-item:hover {
 }
 
 .gilant-contact-form-heading > span {
-    color: #c49a5a;
+    color: var(--gilant-gold);
     font-size: 0.65rem;
     font-weight: 800;
     letter-spacing: 0.18em;
@@ -1678,7 +1577,7 @@ a.gilant-contact-information-item:hover {
 .gilant-contact-form-heading h3 {
     margin: 8px 0 5px;
     color: #fff;
-    font-family: 'Manrope', sans-serif;
+    font-family: var(--gilant-font-heading);
     font-size: clamp(1.35rem, 2.5vw, 1.8rem);
     font-weight: 600;
     line-height: 1.25;
@@ -1750,7 +1649,7 @@ a.gilant-contact-information-item:hover {
 .gilant-quote-form select:focus,
 .gilant-quote-form textarea:focus {
     background: #fff;
-    border-color: #c49a5a;
+    border-color: var(--gilant-gold);
     box-shadow: 0 0 0 3px rgba(196, 154, 90, 0.18);
 }
 
@@ -1775,7 +1674,7 @@ a.gilant-contact-information-item:hover {
     position: absolute;
     top: 50%;
     right: 15px;
-    color: #71845b;
+    color: var(--gilant-olive);
     pointer-events: none;
     transform: translateY(-50%);
 }
@@ -1802,8 +1701,8 @@ a.gilant-contact-information-item:hover {
     font-weight: 800;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    background: #c49a5a;
-    border: 1px solid #c49a5a;
+    background: var(--gilant-gold);
+    border: 1px solid var(--gilant-gold);
     border-radius: 3px;
     cursor: pointer;
     transition:
@@ -1930,7 +1829,7 @@ a.gilant-contact-information-item:hover {
     border: 1px solid rgb(255 255 255 / 25%);
     border-radius: 50%;
     color: #fff;
-    background: #123d2d;
+    background: var(--gilant-forest);
     box-shadow:
         0 8px 25px rgb(11 43 32 / 28%),
         inset 0 1px 0 rgb(255 255 255 / 16%);
@@ -1980,10 +1879,10 @@ a.gilant-contact-information-item:hover {
     padding: 13px 17px;
     border: 1px solid rgb(196 154 90 / 30%);
     border-radius: 3px;
-    color: #f7f4ec;
-    background: #0b2b20;
+    color: var(--gilant-cream);
+    background: var(--gilant-forest-dark);
     box-shadow: 0 8px 25px rgb(0 0 0 / 16%);
-    font-family: 'Manrope', sans-serif;
+    font-family: var(--gilant-font-heading);
     font-size: 0.78rem;
     font-weight: 600;
     white-space: nowrap;
@@ -2005,7 +1904,7 @@ a.gilant-contact-information-item:hover {
     height: 10px;
     border-top: 1px solid rgb(196 154 90 / 30%);
     border-right: 1px solid rgb(196 154 90 / 30%);
-    background: #0b2b20;
+    background: var(--gilant-forest-dark);
     content: '';
     transform: translateY(-50%) rotate(45deg);
 }
