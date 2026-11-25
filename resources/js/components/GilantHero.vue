@@ -1,7 +1,7 @@
 
 <script setup lang="ts">
 import { ArrowDown, ArrowRight } from 'lucide-vue-next'
-import { onMounted, onUnmounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 
 interface Banner {
     title: string
@@ -30,8 +30,24 @@ const props = withDefaults(
 const heroRef = ref<HTMLElement | null>(null)
 const backgroundRef = ref<HTMLElement | null>(null)
 
+const FALLBACK_IMAGE = '/images/hero-background.jpeg'
+
 const isVideo = (image?: string | null) =>
     Boolean(image && /\.(mp4|webm|mov)$/i.test(image))
+
+const videoFailed = ref(false)
+
+// Capas: imagen del banner (si existe) sobre la imagen de respaldo.
+// Si la del banner no carga, el navegador muestra la de respaldo debajo.
+const backgroundImage = computed(() => {
+    const layers = [`url('${FALLBACK_IMAGE}')`]
+
+    if (props.banner?.image_url) {
+        layers.unshift(`url('${props.banner.image_url}')`)
+    }
+
+    return layers.join(', ')
+})
 
 let animationFrame = 0
 
@@ -75,37 +91,37 @@ onUnmounted(() => {
     >
         <!-- VIDEO DE FONDO -->
         <video
-            v-if="props.banner && isVideo(props.banner.image)"
+            v-if="props.banner?.image_url && isVideo(props.banner.image) && !videoFailed"
             ref="backgroundRef"
             class="gilant-hero-media gilant-hero-video"
             :src="props.banner.image_url"
+            :poster="FALLBACK_IMAGE"
             :aria-label="props.banner.alt_text || props.banner.title"
             autoplay
             muted
             loop
             playsinline
             preload="auto"
+            @error="videoFailed = true"
         />
 
-        <!-- IMAGEN DE FONDO -->
-        <div
-            v-else-if="props.banner"
-            ref="backgroundRef"
-            class="gilant-hero-media gilant-hero-background"
-            role="img"
-            :aria-label="props.banner.alt_text || props.banner.title"
-            :style="{
-                backgroundImage: `url('${props.banner.image_url}')`,
-            }"
-        />
-
-        <!-- IMAGEN DE RESPALDO -->
+        <!-- IMAGEN DE FONDO (con respaldo images/hero-background.jpeg) -->
         <div
             v-else
             ref="backgroundRef"
-            class="gilant-hero-media gilant-hero-background gilant-hero-fallback"
+            class="gilant-hero-media gilant-hero-background"
             role="img"
-            aria-label="Arquitectura y proyectos de Grupo Gilant"
+            :aria-label="
+                props.banner?.alt_text ||
+                props.banner?.title ||
+                'Arquitectura y proyectos de Grupo Gilant'
+            "
+            :style="{
+                backgroundImage:
+                    props.banner?.image_url && !isVideo(props.banner.image)
+                        ? backgroundImage
+                        : `url('${FALLBACK_IMAGE}')`,
+            }"
         />
 
         <!-- CAPAS VISUALES -->
@@ -260,16 +276,6 @@ onUnmounted(() => {
     ) scale(1.04);
 }
 
-.gilant-hero-fallback {
-    background:
-        linear-gradient(
-            135deg,
-            #193e30,
-            #526b53 55%,
-            #9a896d
-        );
-}
-
 /* =========================================================
    TRATAMIENTO FOTOGRÁFICO
 ========================================================= */
@@ -279,14 +285,7 @@ onUnmounted(() => {
     inset: 0;
     z-index: -1;
 
-    background:
-        linear-gradient(
-            90deg,
-            rgba(8, 25, 19, 0.78) 0%,
-            rgba(8, 25, 19, 0.58) 32%,
-            rgba(8, 25, 19, 0.20) 68%,
-            rgba(8, 25, 19, 0.05) 100%
-        );
+    background: rgba(8, 25, 19, 0.62);
 }
 
 .gilant-hero-vignette {
@@ -594,12 +593,7 @@ onUnmounted(() => {
     }
 
     .gilant-hero-overlay {
-        background:
-            linear-gradient(
-                90deg,
-                rgba(8, 25, 19, 0.76),
-                rgba(8, 25, 19, 0.30)
-            );
+        background: rgba(8, 25, 19, 0.66);
     }
 }
 

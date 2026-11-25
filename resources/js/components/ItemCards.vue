@@ -62,6 +62,8 @@ const props = withDefaults(defineProps<{
     background?: string
     sectionPadding?: SectionPadding
     galleryPosition?: GalleryPosition
+    // Galería fija (p. ej. Nosotros): todas las imágenes en un solo carrusel.
+    gallery?: { src: string, alt: string }[]
 }>(), {
     variant: 'grid',
     items: () => [],
@@ -79,7 +81,10 @@ const props = withDefaults(defineProps<{
     background: '#f7f4ec',
     sectionPadding: 'md',
     galleryPosition: 'right',
+    gallery: () => [],
 })
+
+const hasStaticGallery = computed(() => props.gallery.length > 0)
 
 const emit = defineEmits<{
     select: [item: ItemCard]
@@ -136,7 +141,9 @@ const featuredItem = computed(() => {
     return props.items[featuredIndex.value] ?? null
 })
 
-const hasMultipleFeatured = computed(() => props.items.length > 1)
+const hasMultipleFeatured = computed(
+    () => !hasStaticGallery.value && props.items.length > 1,
+)
 
 const featuredCounter = computed(() => ({
     current: String(featuredIndex.value + 1).padStart(2, '0'),
@@ -168,6 +175,10 @@ watch(
 // -----------------------------------------------------------------------------
 
 const featuredGallery = computed(() => {
+    if (hasStaticGallery.value) {
+        return props.gallery
+    }
+
     const item = featuredItem.value
 
     if (item?.image || item?.image_url) {
@@ -396,6 +407,7 @@ const featuredGallery = computed(() => {
 
                 <component
                     :is="`h${props.headingLevel}`"
+                    v-if="featuredItem?.title || featuredItem?.name || props.title"
                     :key="`featured-title-${featuredItem?.id ?? featuredIndex}`"
                     class="gilant-about-title"
                 >
@@ -410,7 +422,9 @@ const featuredGallery = computed(() => {
                     :key="`featured-description-${featuredItem?.id ?? featuredIndex}`"
                     class="gilant-about-description"
                 >
-                    <p>
+                    <slot v-if="$slots.intro" name="intro" />
+
+                    <p v-else>
                         {{
                             featuredItem?.description ||
                             featuredItem?.short_description ||
@@ -447,7 +461,7 @@ const featuredGallery = computed(() => {
                     v-if="featuredGallery.length"
                     :key="`featured-gallery-${featuredItem?.id ?? featuredIndex}`"
                     :items="featuredGallery"
-                    :autoplay="false"
+                    :autoplay="hasStaticGallery"
                     :interval="5000"
                 />
 
@@ -784,8 +798,6 @@ const featuredGallery = computed(() => {
 
 .husky-services-intro {
     grid-area: intro;
-    position: sticky;
-    top: 110px;
     margin: 0;
 }
 

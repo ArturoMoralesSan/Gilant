@@ -202,12 +202,12 @@ onBeforeUnmount(() => {
                         <div>
                             <p class="text-sm font-semibold text-[#244334]">
                                 Imagen del cliente
-                                <span class="text-red-500">*</span>
+                                <span class="font-normal text-[#718477]">(opcional)</span>
                             </p>
 
                             <p class="mt-1 text-sm text-[#718477]">
-                                Selecciona el logotipo en formato JPG, PNG o
-                                WEBP. Tamaño máximo: 5 MB.
+                                Si no agregas logotipo, en el sitio se mostrará
+                                el nombre del cliente. JPG, PNG o WEBP, máximo 5 MB.
                             </p>
                         </div>
 
@@ -272,7 +272,6 @@ onBeforeUnmount(() => {
                     :icon="Save"
                     :loading="form.processing"
                     loading-text="Guardando..."
-                    :disabled="!form.logo"
                 >
                     Crear cliente
                 </AdminButton>

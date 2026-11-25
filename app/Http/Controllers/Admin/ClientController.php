@@ -35,7 +35,9 @@ class ClientController extends Controller
                 'id' => $client->id,
                 'name' => $client->name,
                 'logo' => $client->logo,
-                'logo_url' => Storage::disk('public')->url($client->logo),
+                'logo_url' => $client->logo
+                    ? Storage::disk('public')->url($client->logo)
+                    : null,
                 'url' => $client->url,
                 'created_at' => $client->created_at?->format('d/m/Y'),
             ]);
@@ -64,7 +66,7 @@ class ClientController extends Controller
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'logo' => [
-                'required',
+                'nullable',
                 'image',
                 'mimes:jpg,jpeg,png,webp',
                 'max:5120',
@@ -72,16 +74,15 @@ class ClientController extends Controller
             'url' => ['nullable', 'url', 'max:255'],
         ], [
             'name.required' => 'El nombre del cliente es obligatorio.',
-            'logo.required' => 'Debes seleccionar el logotipo del cliente.',
             'logo.image' => 'El archivo debe ser una imagen.',
             'logo.mimes' => 'El logotipo debe ser JPG, JPEG, PNG o WEBP.',
             'logo.max' => 'El logotipo no debe superar los 5 MB.',
             'url.url' => 'Ingresa una dirección URL válida.',
         ]);
 
-        $validated['logo'] = $this->storeLogo(
-            $request->file('logo')
-        );
+        $validated['logo'] = $request->hasFile('logo')
+            ? $this->storeLogo($request->file('logo'))
+            : null;
 
         Client::create($validated);
 
@@ -99,7 +100,9 @@ class ClientController extends Controller
                 'id' => $client->id,
                 'name' => $client->name,
                 'logo' => $client->logo,
-                'logo_url' => Storage::disk('public')->url($client->logo),
+                'logo_url' => $client->logo
+                    ? Storage::disk('public')->url($client->logo)
+                    : null,
                 'url' => $client->url,
             ],
         ]);
@@ -121,6 +124,7 @@ class ClientController extends Controller
                 'max:5120',
             ],
             'url' => ['nullable', 'url', 'max:255'],
+            'remove_logo' => ['nullable', 'boolean'],
         ], [
             'name.required' => 'El nombre del cliente es obligatorio.',
             'logo.image' => 'El archivo debe ser una imagen.',
@@ -128,6 +132,9 @@ class ClientController extends Controller
             'logo.max' => 'El logotipo no debe superar los 5 MB.',
             'url.url' => 'Ingresa una dirección URL válida.',
         ]);
+
+        $removeLogo = $request->boolean('remove_logo');
+        unset($validated['remove_logo']);
 
         if ($request->hasFile('logo')) {
             $newLogo = $this->storeLogo(
@@ -137,6 +144,16 @@ class ClientController extends Controller
             $oldLogo = $client->logo;
 
             $validated['logo'] = $newLogo;
+
+            $client->update($validated);
+
+            if ($oldLogo) {
+                Storage::disk('public')->delete($oldLogo);
+            }
+        } elseif ($removeLogo) {
+            $oldLogo = $client->logo;
+
+            $validated['logo'] = null;
 
             $client->update($validated);
 

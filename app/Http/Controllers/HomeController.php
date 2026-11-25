@@ -179,6 +179,7 @@ public function index(): Response
 
         $about = [
             'id' => $about->id,
+            'who_we_are' => $about->who_we_are,
             'history' => $about->history,
 
             'gallery_images' => $images

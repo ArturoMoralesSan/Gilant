@@ -114,6 +114,7 @@ interface AboutGalleryImage {
 
 interface About {
     id: number
+    who_we_are: string | null
     history: string | null
     gallery_images: AboutGalleryImage[]
 }
@@ -401,11 +402,41 @@ const nosotrosGallery = computed(() =>
         .slice()
         .sort((a, b) => a.sort_order - b.sort_order)
         .map(image => ({
-            id: image.id,
-            image: image.url,
-            imageAlt: image.alt || 'Galería de proyectos de Grupo Gilant',
+            src: image.url,
+            alt: image.alt || 'Galería de proyectos de Grupo Gilant',
         })),
 )
+
+// Texto de Nosotros: "Quiénes somos" (who_we_are), separado por párrafos.
+const nosotrosParagraphs = computed(() => {
+    const text =
+        props.about?.who_we_are ||
+        'Desarrollamos soluciones arquitectónicas y constructivas en madera impregnada. Integramos procesamiento, secado, tratamiento, asesoría e instalación para proyectos habitacionales, industriales, turísticos, agropecuarios y de infraestructura.'
+
+    return text
+        .split(/\n\s*\n/)
+        .map(paragraph => paragraph.trim())
+        .filter(Boolean)
+})
+
+// -----------------------------------------------------------------------------
+// NUESTRAS MADERAS (información del portafolio Grupo Gilant)
+// -----------------------------------------------------------------------------
+
+const woodTypes = [
+    {
+        title: 'Madera tratada a presión',
+        description:
+            'Ideal para aplicaciones estructurales y exteriores, con mayor resistencia a la humedad, insectos y exposición ambiental.',
+        species: null,
+    },
+    {
+        title: 'Maderas tropicales de la Amazonía',
+        description:
+            'Especies de alta densidad y durabilidad natural, seleccionadas para decks, muelles y obras exteriores de gran exigencia.',
+        species: ['Tornillo', 'Cumaru', 'Ipe', 'Teca'],
+    },
+]
 
 // -----------------------------------------------------------------------------
 // CONTACTO
@@ -442,18 +473,7 @@ const whatsappUrl = computed(() => {
         : null
 })
 
-const contactBackgroundImage = computed(() => {
-    const gallery = props.about?.gallery_images ?? []
-
-    const primaryImage = gallery.find(image => image.is_primary)
-
-    return (
-        primaryImage?.url ||
-        gallery[0]?.url ||
-        props.banner?.image_url ||
-        ''
-    )
-})
+const contactBackgroundImage = '/images/contact-background.jpeg'
 
 function phoneUrl(phone: string) {
     return `tel:${phone.replace(/[^\d+]/g, '')}`
@@ -595,8 +615,7 @@ function phoneUrl(phone: string) {
                 id="nosotros"
                 variant="featured"
                 eyebrow="GRUPO GILANT"
-                title="Más de 50 años construyendo confianza."
-                :items="nosotrosGallery"
+                :gallery="nosotrosGallery"
                 background="#F7F4EC"
                 section-padding="lg"
                 gallery-position="right"
@@ -605,11 +624,12 @@ function phoneUrl(phone: string) {
                 image-alt="Grupo Gilant, soluciones arquitectónicas en madera"
             >
                 <template #intro>
-                    <p class="gilant-body-copy">
-                        {{
-                            props.about?.history ||
-                            'Desarrollamos soluciones arquitectónicas y constructivas en madera impregnada. Integramos procesamiento, secado, tratamiento, asesoría e instalación para proyectos habitacionales, industriales, turísticos, agropecuarios y de infraestructura.'
-                        }}
+                    <p
+                        v-for="(paragraph, index) in nosotrosParagraphs"
+                        :key="index"
+                        class="gilant-body-copy"
+                    >
+                        {{ paragraph }}
                     </p>
                 </template>
             </ItemCards>
@@ -659,6 +679,70 @@ function phoneUrl(phone: string) {
             />
 
             <!-- ----------------------------------------------------------------
+                 NUESTRAS MADERAS
+            ----------------------------------------------------------------- -->
+            <section
+                id="maderas"
+                class="gilant-woods"
+                aria-labelledby="gilant-woods-title"
+            >
+                <div class="gilant-woods-grid">
+                    <div class="gilant-woods-list">
+                        <article
+                            v-for="(type, index) in woodTypes"
+                            :key="type.title"
+                            class="gilant-woods-item"
+                        >
+                            <span class="gilant-woods-number">
+                                {{ String(index + 1).padStart(2, '0') }}
+                            </span>
+
+                            <div class="gilant-woods-content">
+                                <h3>{{ type.title }}</h3>
+                                <p>{{ type.description }}</p>
+
+                                <ul
+                                    v-if="type.species"
+                                    class="gilant-woods-species"
+                                    aria-label="Especies disponibles"
+                                >
+                                    <li
+                                        v-for="wood in type.species"
+                                        :key="wood"
+                                    >
+                                        {{ wood }}
+                                    </li>
+                                </ul>
+
+                                <small v-if="type.species">
+                                    Otras especies según disponibilidad.
+                                </small>
+                            </div>
+                        </article>
+                    </div>
+
+                    <div class="gilant-woods-intro">
+                        <span class="gilant-woods-kicker">
+                            <span class="gilant-woods-kicker-dot"></span>
+                            MATERIA PRIMA
+                        </span>
+
+                        <h2
+                            id="gilant-woods-title"
+                            class="gilant-woods-title"
+                        >
+                            Nuestras maderas
+                        </h2>
+
+                        <p>
+                            Madera de la más alta calidad, seleccionada para
+                            proyectos estructurales y de exterior.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ----------------------------------------------------------------
                  CLIENTES
             ----------------------------------------------------------------- -->
             <section
@@ -668,11 +752,11 @@ function phoneUrl(phone: string) {
                 <div class="gilant-container">
                     <div class="gilant-clients-heading">
                         <p class="gilant-eyebrow">
-                            RELACIONES QUE PERDURAN
+                            EXPERIENCIA QUE RESPALDA NUESTRO TRABAJO
                         </p>
 
                         <h2>
-                            Relaciones sólidas. Proyectos extraordinarios.
+                            Algunos de nuestros clientes y proyectos
                         </h2>
                     </div>
                 </div>
@@ -695,13 +779,9 @@ function phoneUrl(phone: string) {
 
                         <span
                             v-else
-                            class="gilant-client-placeholder"
-                            aria-hidden="true"
+                            class="gilant-client-name"
                         >
-                            <TreeDeciduous
-                                :size="23"
-                                stroke-width="1.2"
-                            />
+                            {{ client.name }}
                         </span>
                     </div>
                 </div>
@@ -1155,6 +1235,15 @@ function phoneUrl(phone: string) {
 </template>
 
 <style scoped>
+/* Párrafos del texto de Nosotros */
+.gilant-body-copy {
+    margin: 0;
+}
+
+.gilant-body-copy + .gilant-body-copy {
+    margin-top: 14px;
+}
+
 /* =========================================================
    LAYOUT GLOBAL DE LA LANDING
 ========================================================= */
@@ -1236,7 +1325,6 @@ function phoneUrl(phone: string) {
     grid-template-columns: repeat(4, minmax(0, 1fr));
     width: 100%;
     border-top: 1px solid #e8e7df;
-    border-bottom: 1px solid #e8e7df;
 }
 
 .gilant-client-logo {
@@ -1247,10 +1335,12 @@ function phoneUrl(phone: string) {
     min-height: 150px;
     padding: 24px 32px;
     border-right: 1px solid #e8e7df;
+    border-bottom: 1px solid #e8e7df;
     transition: background 250ms ease;
 }
 
-.gilant-client-logo:last-child {
+/* Última columna de cada fila sin línea derecha */
+.gilant-client-logo:nth-child(4n) {
     border-right: none;
 }
 
@@ -1294,15 +1384,35 @@ function phoneUrl(phone: string) {
     color: var(--gilant-text-light);
 }
 
-.gilant-client-placeholder {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 58px;
-    height: 58px;
-    color: var(--gilant-olive);
-    border: 1px solid #e8e7df;
-    border-radius: 50%;
+/* Cliente sin logotipo: se muestra su nombre */
+.gilant-client-name {
+    position: relative;
+    display: block;
+    padding-top: 14px;
+    color: #25352d;
+    font-family: var(--gilant-font-heading);
+    font-size: clamp(0.95rem, 1.3vw, 1.08rem);
+    font-weight: 600;
+    line-height: 1.35;
+    letter-spacing: 0.02em;
+    text-align: center;
+    text-wrap: balance;
+    transition: color 250ms ease;
+}
+
+.gilant-client-name::before {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 36px;
+    height: 2px;
+    background: var(--gilant-gold, #c49a5a);
+    transform: translateX(-50%);
+    content: '';
+}
+
+.gilant-client-logo:hover .gilant-client-name {
+    color: var(--gilant-forest);
 }
 
 @media (max-width: 900px) {
@@ -1312,15 +1422,14 @@ function phoneUrl(phone: string) {
 
     .gilant-client-logo {
         min-height: 130px;
-        border-bottom: 1px solid #e8e7df;
+    }
+
+    .gilant-client-logo:nth-child(4n) {
+        border-right: 1px solid #e8e7df;
     }
 
     .gilant-client-logo:nth-child(2n) {
         border-right: none;
-    }
-
-    .gilant-client-logo:nth-last-child(-n + 2) {
-        border-bottom: none;
     }
 }
 
@@ -1965,4 +2074,183 @@ a.gilant-contact-information-item:hover {
     }
 }
 
+/* =========================================================
+   NUESTRAS MADERAS (mismo estilo que Servicios)
+========================================================= */
+
+.gilant-woods {
+    width: 100%;
+    padding-block: var(--gilant-section-padding-lg);
+    background: var(--gilant-forest);
+}
+
+.gilant-woods-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    grid-template-areas: "intro list";
+    gap: clamp(35px, 5vw, 65px);
+    align-items: start;
+    width: var(--gilant-container-width);
+    max-width: var(--gilant-content-max);
+    margin-inline: auto;
+}
+
+.gilant-woods-intro {
+    grid-area: intro;
+}
+
+.gilant-woods-kicker {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    color: var(--gilant-gold);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.17em;
+    text-transform: uppercase;
+}
+
+.gilant-woods-kicker-dot {
+    width: 7px;
+    height: 7px;
+    flex: 0 0 7px;
+    border-radius: 50%;
+    background: var(--gilant-gold);
+}
+
+.gilant-woods-title {
+    margin: 0;
+    color: var(--gilant-cream);
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: clamp(32px, 4vw, 48px);
+    font-weight: 400;
+    line-height: 1.12;
+}
+
+.gilant-woods-intro p {
+    color: rgba(247, 244, 236, 0.72);
+    font-size: 13px;
+    line-height: 1.8;
+}
+
+.gilant-woods-list {
+    grid-area: list;
+    width: 100%;
+    border-top: 1px solid rgba(247, 244, 236, 0.2);
+}
+
+.gilant-woods-item {
+    display: grid;
+    grid-template-columns: 34px minmax(0, 1fr);
+    align-items: start;
+    gap: 18px;
+    padding: 21px 4px;
+    border-bottom: 1px solid rgba(247, 244, 236, 0.2);
+    transition:
+        background 0.25s ease,
+        padding 0.25s ease;
+}
+
+.gilant-woods-item:hover {
+    padding-inline: 12px;
+    background: rgba(255, 255, 255, 0.045);
+}
+
+.gilant-woods-number {
+    padding-top: 6px;
+    color: var(--gilant-gold);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+}
+
+.gilant-woods-content h3 {
+    margin: 0 0 6px;
+    color: var(--gilant-cream);
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 20px;
+    font-weight: 400;
+}
+
+.gilant-woods-content p {
+    margin: 0;
+    color: rgba(247, 244, 236, 0.65);
+    font-size: 12px;
+    line-height: 1.65;
+}
+
+.gilant-woods-species {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 26px;
+    margin: 16px 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.gilant-woods-species li {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    color: var(--gilant-cream);
+    font-family: Georgia, 'Times New Roman', serif;
+    font-size: 16px;
+}
+
+.gilant-woods-species li::before {
+    width: 5px;
+    height: 5px;
+    flex: 0 0 5px;
+    border-radius: 50%;
+    background: var(--gilant-gold);
+    content: '';
+}
+
+.gilant-woods-content small {
+    display: block;
+    margin-top: 12px;
+    color: rgba(247, 244, 236, 0.55);
+    font-size: 11px;
+    font-style: italic;
+}
+
+@media (max-width: 1024px) {
+    .gilant-woods {
+        padding-block: 60px;
+    }
+
+    .gilant-woods-grid {
+        gap: 40px;
+    }
+}
+
+@media (max-width: 767px) {
+    .gilant-woods {
+        padding-block: 48px;
+    }
+
+    .gilant-woods-grid {
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-areas:
+            "intro"
+            "list";
+        gap: 32px;
+    }
+
+    .gilant-woods-item {
+        grid-template-columns: 28px minmax(0, 1fr);
+        gap: 12px;
+        padding: 19px 0;
+    }
+
+    .gilant-woods-content h3 {
+        font-size: 18px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .gilant-woods-item {
+        transition: none;
+    }
+}
 </style>

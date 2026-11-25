@@ -16,10 +16,40 @@ const links = [
     { label: 'Contacto', href: '#contacto', type: 'anchor' },
 ]
 
-let sectionObserver: IntersectionObserver | null = null
+const sectionIds = links
+    .filter((link) => link.type === 'anchor')
+    .map((link) => link.href)
+
+function updateActiveSection() {
+    if (getCurrentPage() !== '/') return
+
+    // La sección activa es la última cuyo inicio ya pasó el 30% superior
+    // de la pantalla; si ninguna lo ha hecho, estamos en "Inicio".
+    const line = window.innerHeight * 0.3
+    let current = '#inicio'
+
+    for (const id of sectionIds) {
+        const section = document.querySelector(id)
+
+        if (section && section.getBoundingClientRect().top <= line) {
+            current = id
+        }
+    }
+
+    // Al llegar al final de la página se activa la última sección.
+    if (
+        window.innerHeight + window.scrollY >=
+        document.documentElement.scrollHeight - 2
+    ) {
+        current = sectionIds[sectionIds.length - 1]
+    }
+
+    activeLink.value = current
+}
 
 function handleScroll() {
     isScrolled.value = window.scrollY > 40
+    updateActiveSection()
 }
 
 function closeMenu() {
@@ -34,6 +64,11 @@ function isActive(link: typeof links[number]) {
     const currentPath = getCurrentPage()
 
     if (link.type === 'page') {
+        if (link.href === '/' && currentPath === '/') {
+            // En la home, "Inicio" solo se marca si no hay otra sección activa.
+            return !sectionIds.includes(activeLink.value)
+        }
+
         return currentPath === link.href
     }
 
@@ -103,59 +138,16 @@ async function scrollToInitialHash() {
     })
 }
 
-function setupSectionObserver() {
-    if (window.location.pathname !== '/') return
-
-    sectionObserver?.disconnect()
-
-    const sections = [
-        '#inicio',
-        '#especialidades',
-        '#proyectos',
-        '#clientes',
-        '#contacto',
-    ]
-
-    sectionObserver = new IntersectionObserver(
-        (entries) => {
-            const visibleSections = entries
-                .filter((entry) => entry.isIntersecting)
-                .sort(
-                    (a, b) =>
-                        b.intersectionRatio - a.intersectionRatio,
-                )
-
-            if (visibleSections.length > 0) {
-                activeLink.value = `#${visibleSections[0].target.id}`
-            }
-        },
-        {
-            rootMargin: '-25% 0px -60% 0px',
-            threshold: [0, 0.1, 0.25, 0.5],
-        },
-    )
-
-    sections.forEach((selector) => {
-        const section = document.querySelector(selector)
-
-        if (section) {
-            sectionObserver?.observe(section)
-        }
-    })
-}
-
 onMounted(async () => {
     window.addEventListener('scroll', handleScroll, { passive: true })
     handleScroll()
 
     await scrollToInitialHash()
-    setupSectionObserver()
 })
 
 onUnmounted(() => {
     window.removeEventListener('scroll', handleScroll)
     closeMenu()
-    sectionObserver?.disconnect()
 })
 </script>
 

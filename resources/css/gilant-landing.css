@@ -175,7 +175,7 @@
     padding: 0 6%;
 
     /* ÚNICO CAMBIO: GLASS VERDE */
-    background: rgba(18, 61, 45, 0.72);
+    background: rgba(18, 61, 45, 0.9);
     border-bottom: 1px solid rgba(247, 244, 236, 0.20);
 
     backdrop-filter: blur(16px) saturate(140%);
@@ -197,7 +197,7 @@
     position: fixed;
     min-height: 82px;
 
-    background: rgba(11, 43, 32, 0.82);
+    background: rgba(18, 61, 45, 0.9);
     border-bottom: 1px solid rgba(196, 154, 90, 0.25);
 
     box-shadow: var(--gilant-shadow-header);
@@ -372,7 +372,7 @@
         padding: 0 22px;
 
         /* MISMO GLASS VERDE EN MÓVIL */
-        background: rgba(18, 61, 45, 0.82);
+        background: rgba(18, 61, 45, 0.9);
         border-bottom: 1px solid rgba(196, 154, 90, 0.25);
 
         box-shadow: 0 5px 20px rgba(0, 0, 0, 0.10);

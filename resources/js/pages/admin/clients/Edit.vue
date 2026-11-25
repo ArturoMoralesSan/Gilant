@@ -21,8 +21,8 @@ import admin from '@/routes/admin'
 interface ClientData {
     id: number
     name: string
-    logo: string
-    logo_url: string
+    logo: string | null
+    logo_url: string | null
     url: string | null
 }
 
@@ -34,14 +34,17 @@ const form = useForm({
     name: props.client.name ?? '',
     logo: null as File | null,
     url: props.client.url ?? '',
+    remove_logo: false,
 })
 
 const logoInput = ref<HTMLInputElement | null>(null)
 const previewUrl = ref<string | null>(null)
 
-const currentLogo = computed(
-    () => previewUrl.value || props.client.logo_url,
-)
+const currentLogo = computed(() => {
+    if (previewUrl.value) return previewUrl.value
+
+    return form.remove_logo ? null : props.client.logo_url
+})
 
 function selectLogo(event: Event): void {
     const input = event.target as HTMLInputElement
@@ -56,6 +59,7 @@ function selectLogo(event: Event): void {
     }
 
     form.logo = file
+    form.remove_logo = false
     previewUrl.value = URL.createObjectURL(file)
 }
 
@@ -197,10 +201,18 @@ onBeforeUnmount(() => {
                             class="flex min-h-52 items-center justify-center overflow-hidden rounded-xl border border-[#DCE7DF] bg-white p-5"
                         >
                             <img
+                                v-if="currentLogo"
                                 :src="currentLogo"
                                 :alt="`Logotipo de ${client.name}`"
                                 class="max-h-44 max-w-full object-contain"
                             />
+
+                            <span
+                                v-else
+                                class="text-center text-lg font-semibold text-[#244334]"
+                            >
+                                {{ form.name || client.name }}
+                            </span>
                         </div>
 
                         <p class="form-help">
@@ -208,10 +220,24 @@ onBeforeUnmount(() => {
                                 Vista previa del nuevo logotipo.
                             </template>
 
-                            <template v-else>
+                            <template v-else-if="currentLogo">
                                 Este es el logotipo que se encuentra guardado.
                             </template>
+
+                            <template v-else>
+                                Sin logotipo: en el sitio se mostrará el nombre del cliente.
+                            </template>
                         </p>
+
+                        <button
+                            v-if="client.logo_url && !form.logo"
+                            type="button"
+                            class="mt-2 text-sm font-medium text-red-600 hover:text-red-700 disabled:opacity-50"
+                            :disabled="form.processing"
+                            @click="form.remove_logo = !form.remove_logo"
+                        >
+                            {{ form.remove_logo ? 'Conservar logotipo actual' : 'Quitar logotipo actual' }}
+                        </button>
                     </div>
 
                     <div class="form-field">
